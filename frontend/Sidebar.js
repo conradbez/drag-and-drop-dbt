@@ -1,101 +1,95 @@
 import React from 'react';
 
 const asideStyle = {
-  width: '240px',
-  background: '#1e1e1e',
-  borderRight: '1px solid #333',
-  padding: '20px',
-  color: '#fff',
+  width: '260px',
+  background: '#18181b',
+  borderRight: '1px solid #27272a',
+  padding: '24px',
+  color: '#f4f4f5',
   display: 'flex',
   flexDirection: 'column',
-  gap: '15px',
-  fontFamily: 'sans-serif'
+  gap: '20px',
+  fontFamily: 'Inter, system-ui, sans-serif'
 };
 
 const toolStyle = (color) => ({
-  padding: '12px',
-  background: '#2a2a2a',
+  padding: '12px 16px',
+  background: '#27272a',
   borderLeft: `4px solid ${color}`,
-  borderRadius: '6px',
+  borderRadius: '8px',
   cursor: 'grab',
   fontSize: '13px',
-  fontWeight: '500',
+  fontWeight: '600',
   display: 'flex',
   alignItems: 'center',
-  gap: '10px',
-  transition: 'background 0.2s',
-  userSelect: 'none'
+  justifyContent: 'space-between',
+  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+  userSelect: 'none',
+  boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+  ':hover': {
+    background: '#3f3f46',
+  }
 });
 
 const sectionTitle = {
   fontSize: '11px',
   textTransform: 'uppercase',
-  color: '#666',
-  letterSpacing: '1px',
-  marginBottom: '5px',
-  marginTop: '10px'
+  color: '#71717a',
+  letterSpacing: '0.1em',
+  fontWeight: '700',
+  marginBottom: '4px'
 };
 
-export const Sidebar = () => {
-  const onDragStart = (event, nodeType) => {
-    event.dataTransfer.setData('application/reactflow', nodeType);
+const iconStyle = {
+  fontSize: '16px',
+};
+
+const ToolItem = ({ type, label, color, icon }) => {
+  const onDragStart = (event) => {
+    event.dataTransfer.setData('application/reactflow', type);
     event.dataTransfer.effectAllowed = 'move';
   };
 
   return (
+    <div 
+      style={toolStyle(color)} 
+      onDragStart={onDragStart} 
+      draggable
+    >
+      <span>{label}</span>
+      <span style={iconStyle}>{icon}</span>
+    </div>
+  );
+};
+
+export const Sidebar = () => {
+  return (
     <aside style={asideStyle}>
-      <div style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '10px', color: '#4ade80' }}>
-        🦞 DBT Factory
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+        <div style={{ background: '#4ade80', width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🦞</div>
+        <div style={{ fontSize: '18px', fontWeight: '800', letterSpacing: '-0.02em', color: '#fff' }}>
+          DBT Factory
+        </div>
       </div>
       
-      <div style={sectionTitle}>Input</div>
-      <div 
-        style={toolStyle('#4ade80')} 
-        onDragStart={(event) => onDragStart(event, 'source')} 
-        draggable
-      >
-        <span>📄</span> Seed Source
+      <div>
+        <div style={sectionTitle}>Input Data</div>
+        <ToolItem type="source" label="Seed Source" color="#4ade80" icon="📄" />
       </div>
 
-      <div style={sectionTitle}>Transformations</div>
-      <div 
-        style={toolStyle('#60a5fa')} 
-        onDragStart={(event) => onDragStart(event, 'join')} 
-        draggable
-      >
-        <span>🔗</span> Join
-      </div>
-      <div 
-        style={toolStyle('#f87171')} 
-        onDragStart={(event) => onDragStart(event, 'filter')} 
-        draggable
-      >
-        <span>🔍</span> Filter
-      </div>
-      <div 
-        style={toolStyle('#fbbf24')} 
-        onDragStart={(event) => onDragStart(event, 'aggregate')} 
-        draggable
-      >
-        <span>📊</span> Aggregate
-      </div>
-      <div 
-        style={toolStyle('#a78bfa')} 
-        onDragStart={(event) => onDragStart(event, 'formula')} 
-        draggable
-      >
-        <span>🧮</span> Formula
-      </div>
-      <div 
-        style={toolStyle('#2dd4bf')} 
-        onDragStart={(event) => onDragStart(event, 'sort')} 
-        draggable
-      >
-        <span>🔃</span> Sort
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div style={sectionTitle}>Transformations</div>
+        <ToolItem type="join" label="Join" color="#60a5fa" icon="🔗" />
+        <ToolItem type="filter" label="Filter" color="#f87171" icon="🔍" />
+        <ToolItem type="aggregate" label="Aggregate" color="#fbbf24" icon="📊" />
+        <ToolItem type="formula" label="Formula" color="#a78bfa" icon="🧮" />
+        <ToolItem type="sort" label="Sort" color="#2dd4bf" icon="🔃" />
       </div>
 
-      <div style={{ marginTop: 'auto', fontSize: '10px', color: '#444', textAlign: 'center' }}>
-        Drag items onto the canvas
+      <div style={{ marginTop: 'auto', padding: '16px', background: '#27272a', borderRadius: '12px', border: '1px dashed #3f3f46' }}>
+        <p style={{ fontSize: '11px', color: '#a1a1aa', margin: 0, lineHeight: '1.5', textAlign: 'center' }}>
+          Drag components onto the canvas to build your pipeline.
+        </p>
       </div>
     </aside>
   );
